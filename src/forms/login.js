@@ -23,7 +23,7 @@ import {
 
 import Home  from './home';     
 import Dashboard  from './dashboard'; 
-// import Report  from './report'; 
+ import Report  from './report'; 
 import PageNotFound  from './pageNotFound'; 
 import { textAlign } from '@mui/system';
 
@@ -35,7 +35,7 @@ function Login() {
               <Route path='/' element={<Home />} />
               <Route path='/dashboard' element={<Dashboard />}/>
               <Route path='*' element={<PageNotFound />}/>
-              {/* <Route path='/report' element={<Report />} /> */}
+              <Route path='/report' element={<Report />} /> 
               
             </Routes>    
         </Router>     

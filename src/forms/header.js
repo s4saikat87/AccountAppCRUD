@@ -45,8 +45,8 @@ const Header = () => {
         }
     const openDashBoardPage=()=>{
         debugger;
-        let email =localStorage.getItem('email');
-        navigate("/dashboard",{state:email});
+      
+        navigate("/dashboard");
         }
     const signOut=()=>{
 

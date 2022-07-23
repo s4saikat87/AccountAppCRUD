@@ -37,9 +37,8 @@ function CustomToolbar() {
     return (
         <GridToolbarContainer>
             <GridToolbarExport csvOptions={{
-                fileName: 'Buyer Details',
-                delimiter: ';',
-                utf8WithBom: true,
+                fileName: 'Buyer Details'
+               
             }} />
         </GridToolbarContainer>
     );
@@ -49,9 +48,7 @@ function CustomToolbarPayment() {
     return (
         <GridToolbarContainer>
             <GridToolbarExport csvOptions={{
-                fileName: 'Payment Details',
-                delimiter: ';',
-                utf8WithBom: true,
+                fileName: 'Payment Details'
             }} />
         </GridToolbarContainer>
     );
@@ -99,10 +96,12 @@ const Dashboard = () => {
         const fetchData = async () => {
             // setLoading(true);
             try {
+                debugger;
 
-                let data = location.state;
-                let email = data.Email;
-                let name = data.Name;
+                //let data = location.state;
+              
+                let email = JSON.parse(localStorage.getItem('email'));// data.Email;
+                let name =  JSON.parse(localStorage.getItem('name'));//data.Name;
                 setName(name);
                 setEmail(email);
                 BuyerGetData();
@@ -136,10 +135,11 @@ const Dashboard = () => {
     const handleCloseError = () => {
 
         setOpenError(false);
+        setId(0);
     }
 
     const handleCloseErrorOK = () => {
-        debugger;
+       
         if (id > 0) {
 
             axios.delete(`/deleteBuyer/${id}`,
@@ -193,7 +193,7 @@ const Dashboard = () => {
         }
 
         else if (idPayment > 0) {
-            debugger;
+          
             let id = idPayment;
             axios.delete(`/paymentDelete/${id}`,
                 // postData,
@@ -206,7 +206,7 @@ const Dashboard = () => {
                 //   }
             )
                 .then(response => {
-                    debugger;
+                  
                     console.log(response);
                     setLoading(false);
                     // const data = JSON.parse(response.data);
@@ -239,7 +239,7 @@ const Dashboard = () => {
 
                 })
                 .catch((error) => {
-                    debugger;
+                   
                     return error;
                 });
 
@@ -271,7 +271,7 @@ const Dashboard = () => {
         if (reason && reason == "backdropClick")
             return;
         setAddOpenBuyer(false);
-
+        setId(0);
 
         setstateBuyer({
             ...stateBuyer,
@@ -306,7 +306,7 @@ const Dashboard = () => {
 
     }
     const handleDeleteClickPayment = (e, cellVal) => {
-        debugger;
+       
         setOpenError(true);
         setErrorCustom("Are you sure you want to delete payment " + cellVal.row.payment + " of buyer '" + cellVal.row.buyer + "' ?");
         setIdPayment(cellVal.row.id);
@@ -403,7 +403,7 @@ const Dashboard = () => {
 
         {
             field: 'buyer', headerName: 'Buyer Name',
-            minWidth: 330, flex: 1 //width: 250 
+            minWidth: 250, flex: 1 //width: 250 
         },
 
         {
@@ -411,7 +411,7 @@ const Dashboard = () => {
             headerName: 'Payment Received(Rs)',
             disablePadding: true,
             type: 'number',
-            minWidth: 330, flex: 1,
+            minWidth: 250, flex: 1,
             //  width: 200,
             valueFormatter: ({ value }) => `${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
         },
@@ -419,9 +419,18 @@ const Dashboard = () => {
             field: 'paymentDate',
             headerName: 'Payment Date',
             type: 'date',
-            minWidth: 330, flex: 1,
+            minWidth: 250, flex: 1,
             // width: 230,
             valueFormatter: DateFormatter
+            //valueFormatter: ({ value }) => `${value.toLocaleString()}`
+        },
+        {
+            field: 'totalPrice',
+            headerName: 'Total Price',
+            type: 'number',
+            minWidth: 250, flex: 1,
+            // width: 230,
+            valueFormatter: ({ value }) => `${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
             //valueFormatter: ({ value }) => `${value.toLocaleString()}`
         },
 
@@ -528,7 +537,7 @@ const Dashboard = () => {
                 //  console.log(response);
 
                 const reqPaymentData = response.data.data;
-                debugger;
+               
                 setRowPaymentGet(reqPaymentData);
 
                 setLoading(false);
@@ -579,6 +588,7 @@ const Dashboard = () => {
 
         else {
             setTouched(false);
+
             let buyerName = stateBuyer.buyerName;
             let flatMeasurement = stateBuyer.flatMeasurement;
             let pricePersqft = stateBuyer.pricePersqft;
@@ -695,7 +705,7 @@ const Dashboard = () => {
     }
 
     const handleChangePayment = (event) => {
-        debugger;
+       
         //var index = event.nativeEvent.target.selectedIndex;
         // setBuyerId(index);
         // event.nativeEvent.target[index].text
@@ -731,7 +741,7 @@ const Dashboard = () => {
     // }
 
     const handleChange = (event) => {
-        debugger;
+      
         setstateBuyer({
             ...stateBuyer,
             [event.target.name]: event.target.value
@@ -764,12 +774,13 @@ const Dashboard = () => {
             const buyerData = rowBuyerGet.find((buyer) => buyer.id === statePayment.selBuyer);
             let buyer = buyerData.buyerName;
             let buyerId = statePayment.selBuyer;
+            let totalPrice=buyerData.totalPrice;
             let payment = parseInt(statePayment.paymentReceived);
             let paymentDate = statePayment.dateOfPayment;
             let loggedinUserName = name;
             let loggedinuserEmail = email;
 
-            var postData = { buyerId, buyer, payment, paymentDate, loggedinUserName, loggedinuserEmail };
+            var postData = { buyerId, buyer, payment, paymentDate,totalPrice, loggedinUserName, loggedinuserEmail };
             setLoading(true);
 
             //  if (id === 0) {
@@ -896,7 +907,7 @@ const Dashboard = () => {
 
                     {
 
-                        <div style={{ height: 300, width: '100%' }}>
+                        <div style={{ height: 350, width: '100%' }}>
                             <DataGrid
                                 components={{
                                     Toolbar: CustomToolbar,
@@ -906,8 +917,8 @@ const Dashboard = () => {
                                 //  id={Math.random()}
                                 rows={rowBuyerGet}
                                 columns={columnsBuyer}
-                                pageSize={5}
-                                rowsPerPageOptions={[4]}
+                                pageSize={3}
+                                rowsPerPageOptions={[3]}
 
                             />
                         </div>
@@ -944,10 +955,10 @@ const Dashboard = () => {
 
                     {
 
-                        <div style={{ height: 320, width: '100%' }}>
+                        <div style={{ height: 350, width: '100%' }}>
                             <DataGrid
                                 components={{
-                                    Toolbar: CustomToolbarPayment,
+                                    Toolbar: CustomToolbar,
 
                                 }}
                                
@@ -960,7 +971,7 @@ const Dashboard = () => {
                                 rows={rowPaymentGet}
                                 columns={columnsPayment}
                                 pageSize={3}
-                                rowsPerPageOptions={[4]}
+                                rowsPerPageOptions={[3]}
 
                             />
                         </div>

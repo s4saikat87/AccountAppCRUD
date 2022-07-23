@@ -100,7 +100,10 @@ const Home = () => {
                   // Invalid password
                 //  setErrorMessages({ name: "pass", message: errors.pass });
                 } else {
-                  navigate("/dashboard",{state:userData});
+                    debugger;
+                    localStorage.setItem('email', JSON.stringify(userData.Email));
+                    localStorage.setItem('name', JSON.stringify(userData.Name));
+                  navigate("/dashboard");
                 }
               } else {
                 console.log("Username not found");
