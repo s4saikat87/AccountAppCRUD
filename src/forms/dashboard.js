@@ -96,8 +96,6 @@ const Dashboard = () => {
         const fetchData = async () => {
             // setLoading(true);
             try {
-                debugger;
-
                 //let data = location.state;
               
                 let email = JSON.parse(localStorage.getItem('email'));// data.Email;
@@ -769,7 +767,7 @@ const Dashboard = () => {
         else {
 
             setTouched(false);
-            debugger;
+          //  debugger;
 
             const buyerData = rowBuyerGet.find((buyer) => buyer.id === statePayment.selBuyer);
             let buyer = buyerData.buyerName;
@@ -795,8 +793,7 @@ const Dashboard = () => {
                 //   }
             )
                 .then(response => {
-                    debugger;
-                    console.log(response);
+                  
                     setLoading(false);
                     // const data = JSON.parse(response.data);
 
